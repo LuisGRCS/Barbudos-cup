@@ -46,7 +46,7 @@ export function Contagem({
   return (
     <div>
       {titulo}
-      <div role="timer" aria-label={rotulo}>
+      <div role="timer" aria-label={rotulo} data-alvo={alvo}>
         <dl className={`grid grid-cols-4 divide-x-2 ${escuro ? "divide-preto/20" : "divide-giz"}`}>
           {itens.map((item, i) => (
             <div key={i} className="flex flex-col px-2 first:pl-0 sm:px-5">
