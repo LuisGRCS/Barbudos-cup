@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { EscudoTime } from "@/components/EscudoTime";
-import { Icone } from "@/components/Icone";
 import { Container, TituloPagina } from "@/components/Titulo";
 import { lerTorneio } from "@/lib/dados";
 import { artilharia, cartoes, melhorDefesa } from "@/lib/torneio";
@@ -26,11 +25,11 @@ export default async function Estatisticas() {
       </TituloPagina>
 
       <div className="grid gap-14 lg:grid-cols-2">
-        <Bloco id="artilharia" titulo="Artilharia" icone="bola" vazio="Nenhum gol marcado ainda." className="lg:row-span-2">
+        <Bloco id="artilharia" titulo="Artilharia" vazio="Nenhum gol marcado ainda." className="lg:row-span-2">
           {gols.length > 0 && (
             <>
-              <div className="recorte-escudo mb-4 flex items-center gap-4 bg-sol px-5 pt-5 pb-9 text-preto">
-                <span className="numeros font-titulo text-6xl leading-none">{gols[0].total}</span>
+              <div className="mb-4 flex items-center gap-4 bg-sol px-5 py-5 text-preto">
+                <span className="numeros font-titulo text-7xl leading-none font-black">{gols[0].total}</span>
                 <div className="min-w-0">
                   <p className="text-base font-semibold">
                     {gols[0].total === 1 ? "gol" : "gols"}, {lideres.length > 1 ? "dividem a liderança" : "lidera a artilharia"}
@@ -57,7 +56,7 @@ export default async function Estatisticas() {
           )}
         </Bloco>
 
-        <Bloco id="defesa" titulo="Melhor defesa" icone="escudo" vazio="A melhor defesa aparece depois dos primeiros jogos.">
+        <Bloco id="defesa" titulo="Melhor defesa" vazio="A melhor defesa aparece depois dos primeiros jogos.">
           {defesas.length > 0 && (
             <Ranking
               linhas={defesas.map((d) => ({
@@ -78,7 +77,7 @@ export default async function Estatisticas() {
           )}
         </Bloco>
 
-        <Bloco id="cartoes" titulo="Cartões" icone="amarelo" vazio="Nenhum cartão aplicado até agora. Que continue assim.">
+        <Bloco id="cartoes" titulo="Cartões" vazio="Nenhum cartão aplicado até agora. Que continue assim.">
           {disciplina.length > 0 && (
             <Ranking
               linhas={disciplina.map((c) => ({
@@ -116,22 +115,19 @@ export default async function Estatisticas() {
 function Bloco({
   id,
   titulo,
-  icone,
   vazio,
   children,
   className = "",
 }: {
   id: string;
   titulo: string;
-  icone: string;
   vazio: string;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <section aria-labelledby={id} className={className}>
-      <h2 id={id} className="mb-5 flex items-center gap-3 text-[clamp(2rem,7vw,3rem)]">
-        <Icone nome={icone} className="text-3xl text-sol" />
+      <h2 id={id} className="mb-4 text-[clamp(2.6rem,10vw,4rem)]">
         {titulo}
       </h2>
       {children || <p className="text-cinza">{vazio}</p>}
@@ -157,7 +153,7 @@ function Ranking({ linhas, limite }: { linhas: Linha[]; limite?: number }) {
 
   const item = (l: Linha, i: number) => (
     <li key={l.chave}>
-      <Link href={l.link ?? `/times/${l.time.slug}`} className="flex items-center gap-3 py-3 hover:bg-carvao">
+      <Link href={l.link ?? `/times/${l.time.slug}`} className="flex items-center gap-3 py-3 hover:text-sol">
         <span className="w-7 shrink-0 text-center font-titulo text-xl text-cinza-escuro">
           {i > 0 && posicoes[i] === posicoes[i - 1] ? "" : `${posicoes[i]}º`}
         </span>
@@ -175,14 +171,14 @@ function Ranking({ linhas, limite }: { linhas: Linha[]; limite?: number }) {
   const resto = limite ? linhas.slice(limite) : [];
   return (
     <>
-      <ol className="numeros divide-y divide-linha border-y border-linha">{visiveis.map((l, i) => item(l, i))}</ol>
+      <ol className="numeros divide-y-2 divide-linha border-t-2 border-branco">{visiveis.map((l, i) => item(l, i))}</ol>
       {resto.length > 0 && (
         <details className="group mt-2">
           <summary className="cursor-pointer list-none py-3 font-semibold text-sol hover:underline [&::-webkit-details-marker]:hidden">
             <span className="group-open:hidden">Ver todos ({linhas.length})</span>
             <span className="hidden group-open:inline">Mostrar menos</span>
           </summary>
-          <ol className="numeros divide-y divide-linha border-b border-linha">
+          <ol className="numeros divide-y-2 divide-linha">
             {resto.map((l, j) => item(l, j + visiveis.length))}
           </ol>
         </details>

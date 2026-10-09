@@ -1,12 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Barlow_Condensed } from "next/font/google";
+import { Barlow_Semi_Condensed, Big_Shoulders } from "next/font/google";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Rodape } from "@/components/Rodape";
 import "./globals.css";
 
-const anton = Anton({ variable: "--fonte-anton", weight: "400", subsets: ["latin"], display: "swap" });
-const barlow = Barlow_Condensed({
-  variable: "--fonte-barlow",
+const titulo = Big_Shoulders({
+  variable: "--fonte-titulo",
+  subsets: ["latin"],
+  axes: ["opsz"],
+  display: "swap",
+});
+const texto = Barlow_Semi_Condensed({
+  variable: "--fonte-texto",
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
@@ -37,7 +42,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${anton.variable} ${barlow.variable}`}>
+    <html lang="pt-BR" className={`${titulo.variable} ${texto.variable}`}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#conteudo"

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BotaoInstagram } from "@/components/BotaoInstagram";
-import { Icone } from "@/components/Icone";
 import { BlocoDatasJogos, BlocoFormato, BlocoPagamento } from "@/components/info/Blocos";
 import { Local } from "@/components/info/Local";
 import { Secao } from "@/components/info/Secao";
@@ -27,33 +26,32 @@ export default async function Informacoes() {
         .
       </TituloPagina>
 
-      <Secao id="datas" titulo="Datas e horários" icone={<Icone nome="calendario" />}>
+      <Secao id="datas" titulo="Datas e horários">
         <BlocoDatasJogos cfg={cfg} />
       </Secao>
 
-      <Secao id="local" titulo="Local" icone={<Icone nome="mapa" />}>
+      <Secao id="local" titulo="Local">
         <Local nome={cfg.local_nome} endereco={cfg.local_endereco} />
       </Secao>
 
-      <Secao id="valores" titulo="Taxa e pagamento" icone={<Icone nome="dinheiro" />}>
+      <Secao id="valores" titulo="Taxa e pagamento">
         <BlocoPagamento cfg={cfg} />
       </Secao>
 
-      <Secao id="premiacao" titulo="Premiação" icone={<Icone nome="trofeu" />}>
+      <Secao id="premiacao" titulo="Premiação">
         {premios.length > 0 ? (
-          <ol className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+          <ol className="divide-y-2 divide-linha">
             {premios.map((p, i) => (
-              <li
-                key={p.id}
-                className={`recorte-escudo flex flex-col gap-2 px-4 pt-5 pb-9 sm:px-5 ${
-                  i === 0 ? "col-span-2 bg-sol text-preto lg:col-span-1" : "bg-carvao ring-1 ring-linha ring-inset"
-                }`}
-              >
-                <Icone nome="trofeu" className={`text-3xl ${i === 0 ? "" : "text-sol"}`} />
-                <h3 className="text-2xl sm:text-3xl">{p.titulo}</h3>
-                <p className={i === 0 ? "font-semibold" : "text-cinza"}>
-                  <Campo valor={p.descricao} sobreSol={i === 0} />
-                </p>
+              <li key={p.id} className="grid grid-cols-[3.5rem_1fr] items-baseline gap-3 py-3 first:pt-0 sm:grid-cols-[4.5rem_1fr]">
+                <span className={`numeros font-titulo text-5xl leading-none font-black ${i === 0 ? "text-sol" : "text-cinza-escuro"}`}>
+                  {p.titulo.match(/artilheiro|goleiro|craque|fair/i) ? "★" : `${i + 1}º`}
+                </span>
+                <div>
+                  <h3 className="text-[2rem] leading-none">{p.titulo}</h3>
+                  <p className="mt-1 text-lg text-cinza">
+                    <Campo valor={p.descricao} />
+                  </p>
+                </div>
               </li>
             ))}
           </ol>
@@ -64,14 +62,14 @@ export default async function Informacoes() {
         )}
       </Secao>
 
-      <Secao id="formato" titulo="Times e formato" icone={<Icone nome="chave" />}>
+      <Secao id="formato" titulo="Times e formato">
         <BlocoFormato cfg={cfg} />
       </Secao>
 
       <Secao
         id="contato"
         titulo="Contato e dúvidas"
-        icone={<Icone nome="instagram" />}
+       
         intro="Todo contato com a organização é feito pelo direct do Instagram oficial. Mande sua dúvida por lá que a gente responde."
       >
         <BotaoInstagram usuario={cfg.instagram_usuario} />

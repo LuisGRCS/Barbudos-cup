@@ -20,9 +20,10 @@ export function diaSemana(iso: string) {
 }
 
 export function hora(iso: string) {
-  return new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, hour: "2-digit", minute: "2-digit" })
+  const [h, m] = new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
     .format(new Date(iso))
-    .replace(":", "h");
+    .split(":");
+  return `${Number(h)}h${m === "00" ? "" : m}`;
 }
 
 export function dataEHora(iso: string) {

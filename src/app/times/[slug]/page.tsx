@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { CartaoJogo } from "@/components/CartaoJogo";
 import { EscudoTime } from "@/components/EscudoTime";
 import { Icone } from "@/components/Icone";
-import { Container, Divisa } from "@/components/Titulo";
+import { Container } from "@/components/Titulo";
 import { lerTorneio } from "@/lib/dados";
 import { linkInstagram } from "@/lib/formato";
 import { artilharia, resumoDoTime } from "@/lib/torneio";
@@ -63,10 +63,9 @@ async function DetalheTime({ params }: { params: Promise<{ slug: string }> }) {
       <header className="flex flex-col items-start gap-5 pt-6 pb-10 sm:flex-row sm:items-center sm:gap-8">
         <EscudoTime id={time.id} nome={time.nome} escudoPath={time.escudo_path} tamanho={112} />
         <div>
-          <h1 className="text-[clamp(2.75rem,11vw,5.5rem)]">{time.nome}</h1>
-          <Divisa className="mt-3" />
+          <h1 className="text-[clamp(3.2rem,14vw,7rem)]">{time.nome}</h1>
           <p className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-lg">
-            {grupo && <span className="font-semibold text-azul-claro">Grupo {grupo.nome}</span>}
+            {grupo && <span className="bg-sol px-2 font-bold text-preto">Grupo {grupo.nome}</span>}
             {time.instagram && (
               <a
                 href={linkInstagram(time.instagram)}
@@ -82,11 +81,11 @@ async function DetalheTime({ params }: { params: Promise<{ slug: string }> }) {
       </header>
 
       <section aria-label="Números do time" className="mb-14">
-        <dl className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-          {numeros.map((n) => (
-            <div key={n.rotulo} className="bg-carvao px-3 py-4 text-center ring-1 ring-linha ring-inset">
-              <dt className="text-sm text-cinza">{n.rotulo}</dt>
-              <dd className="numeros mt-1 font-titulo text-4xl text-sol">{n.valor}</dd>
+        <dl className="grid grid-cols-3 gap-y-6 border-y-2 border-branco py-5 sm:grid-cols-6">
+          {numeros.map((n, i) => (
+            <div key={n.rotulo} className={`flex flex-col px-3 ${i % 3 === 0 ? "" : "border-l-2 border-giz"} sm:border-l-2 sm:first:border-l-0`}>
+              <dt className="order-last text-sm font-semibold text-cinza">{n.rotulo}</dt>
+              <dd className="numeros font-titulo text-5xl leading-none font-black">{n.valor}</dd>
             </div>
           ))}
         </dl>
@@ -94,18 +93,18 @@ async function DetalheTime({ params }: { params: Promise<{ slug: string }> }) {
 
       <div className="grid gap-14 lg:grid-cols-[1fr_1.3fr]">
         <section aria-labelledby="titulo-elenco">
-          <h2 id="titulo-elenco" className="mb-5 text-4xl">
+          <h2 id="titulo-elenco" className="mb-3 text-5xl">
             Elenco
           </h2>
           {elenco.length === 0 ? (
             <p className="text-cinza">O capitão ainda não cadastrou o elenco.</p>
           ) : (
-            <ol className="divide-y divide-linha border-y border-linha">
+            <ol className="divide-y-2 divide-linha border-t-2 border-branco">
               {elenco.map((j) => {
                 const gols = goleadores.find((g) => g.jogadorId === j.id)?.total ?? 0;
                 return (
                   <li key={j.id} className="flex items-center gap-4 py-2.5">
-                    <span className="numeros w-10 text-right font-titulo text-3xl text-sol">{j.numero}</span>
+                    <span className="numeros w-10 text-right font-titulo text-[2rem] leading-none font-black text-sol">{j.numero}</span>
                     <span className="flex-1 text-lg font-semibold">{j.nome}</span>
                     {gols > 0 && (
                       <span className="numeros inline-flex items-center gap-1 text-cinza">
@@ -120,13 +119,13 @@ async function DetalheTime({ params }: { params: Promise<{ slug: string }> }) {
         </section>
 
         <section aria-labelledby="titulo-jogos">
-          <h2 id="titulo-jogos" className="mb-5 text-4xl">
+          <h2 id="titulo-jogos" className="mb-3 text-5xl">
             Jogos
           </h2>
           {resumo.jogos.length === 0 ? (
             <p className="text-cinza">Os jogos aparecem aqui depois do sorteio dos grupos.</p>
           ) : (
-            <div className="grid gap-3">
+            <div className="border-t-2 border-branco">
               {resumo.jogos.map((j) => (
                 <CartaoJogo key={j.id} dados={dados} jogo={j} />
               ))}

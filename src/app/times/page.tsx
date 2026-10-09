@@ -22,28 +22,37 @@ export default async function Times() {
       </TituloPagina>
 
       {times.length === 0 ? (
-        <div className="recorte-escudo bg-carvao px-6 pt-8 pb-14 text-center ring-1 ring-linha ring-inset">
+        <div className="border-t-2 border-branco pt-8">
           <p className="text-xl">Nenhum time confirmado ainda.</p>
           <Link href="/inscricao" className="botao botao-sol mt-6">
             Inscreva seu time
           </Link>
         </div>
       ) : (
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {times.map((t) => (
             <li key={t.id}>
+              {/* Cada time vira uma figurinha do álbum */}
               <Link
                 href={`/times/${t.slug}`}
-                className="group recorte-escudo flex h-full flex-col items-center bg-carvao px-3 pt-6 pb-10 text-center ring-1 ring-linha transition-colors ring-inset hover:bg-grafite [--ponta:1.5rem]"
+                className="group flex h-full flex-col rounded-md bg-branco p-1.5 text-preto transition-transform hover:-translate-y-1"
               >
-                <EscudoTime id={t.id} nome={t.nome} escudoPath={t.escudo_path} tamanho={72} />
-                <h2 className="mt-4 text-[1.6rem] leading-tight transition-colors group-hover:text-sol sm:text-3xl">
-                  {t.nome}
-                </h2>
-                {t.instagram && <p className="mt-1 text-base break-all text-cinza">@{t.instagram}</p>}
-                {nomeGrupo(t.grupo_id) && (
-                  <p className="mt-2 text-sm font-bold text-azul-claro">Grupo {nomeGrupo(t.grupo_id)}</p>
-                )}
+                <div className="linhas-de-campo relative grid aspect-[5/4] place-items-center rounded-[3px] bg-preto [background-size:180%] [background-position:center]">
+                  <div aria-hidden="true" className="absolute inset-0 rounded-[3px] bg-preto/80" />
+                  <div className="relative">
+                    <EscudoTime id={t.id} nome={t.nome} escudoPath={t.escudo_path} tamanho={68} />
+                  </div>
+                  {nomeGrupo(t.grupo_id) && (
+                    <span className="absolute top-1.5 left-1.5 bg-sol px-1.5 font-titulo text-lg leading-tight font-black">
+                      <span className="sr-only">Grupo </span>
+                      {nomeGrupo(t.grupo_id)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col px-1.5 pt-2.5 pb-2">
+                  <h2 className="text-[1.55rem] leading-[0.95] sm:text-[1.8rem]">{t.nome}</h2>
+                  {t.instagram && <p className="mt-1 truncate text-sm font-semibold text-preto/60">@{t.instagram}</p>}
+                </div>
               </Link>
             </li>
           ))}

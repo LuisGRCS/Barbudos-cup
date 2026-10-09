@@ -72,7 +72,6 @@ export default async function Tabela() {
                               <span
                                 aria-hidden="true"
                                 className="absolute top-1/2 right-0 h-[3px] w-8 bg-vermelho"
-                                style={{ clipPath: "polygon(0 0,100% 0,calc(100% - 3px) 100%,0 100%)" }}
                               />
                             )}
                           </li>
@@ -109,34 +108,31 @@ function TabelaGrupo({
 }) {
   const linhas = classificacao(dados, grupoId);
   const colunas = [
-    { chave: "pontos", curto: "P", longo: "Pontos" },
-    { chave: "jogos", curto: "J", longo: "Jogos" },
-    { chave: "vitorias", curto: "V", longo: "Vitórias" },
-    { chave: "empates", curto: "E", longo: "Empates" },
-    { chave: "derrotas", curto: "D", longo: "Derrotas" },
-    { chave: "golsPro", curto: "GP", longo: "Gols pró" },
-    { chave: "golsContra", curto: "GC", longo: "Gols contra" },
-    { chave: "saldo", curto: "SG", longo: "Saldo de gols" },
+    { chave: "pontos", curto: "P", longo: "Pontos", oculto: false },
+    { chave: "jogos", curto: "J", longo: "Jogos", oculto: false },
+    { chave: "vitorias", curto: "V", longo: "Vitórias", oculto: false },
+    { chave: "empates", curto: "E", longo: "Empates", oculto: false },
+    { chave: "derrotas", curto: "D", longo: "Derrotas", oculto: false },
+    { chave: "golsPro", curto: "GP", longo: "Gols pró", oculto: true },
+    { chave: "golsContra", curto: "GC", longo: "Gols contra", oculto: true },
+    { chave: "saldo", curto: "SG", longo: "Saldo de gols", oculto: false },
   ] as const;
 
   return (
     <div className="min-w-0">
-      <h3 className="mb-3 flex items-center gap-3 text-3xl">
-        <span className="grid size-10 place-items-center bg-azul font-titulo text-2xl" style={{ clipPath: "polygon(0 0,100% 0,100% 72%,50% 100%,0 72%)" }}>
-          {nome}
-        </span>
+      <h3 className="mb-3 text-5xl">
         Grupo {nome}
       </h3>
       <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <table className="numeros w-full min-w-[30rem] border-collapse text-left text-base">
+        <table className="numeros w-full sm:min-w-[30rem] border-collapse text-left text-base">
           <caption className="sr-only">Classificação do Grupo {nome}</caption>
           <thead>
-            <tr className="border-b-2 border-vermelho text-cinza">
+            <tr className="border-b-2 border-branco text-cinza">
               <th scope="col" className="sticky left-0 bg-preto py-2 pr-2 font-semibold">
                 Time
               </th>
               {colunas.map((c) => (
-                <th key={c.chave} scope="col" className="w-9 px-0.5 py-2 text-center font-semibold">
+                <th key={c.chave} scope="col" className={`w-9 px-0.5 py-2 text-center font-semibold ${c.oculto ? "hidden sm:table-cell" : ""}`}>
                   <abbr title={c.longo} className="no-underline">
                     {c.curto}
                   </abbr>
@@ -148,7 +144,7 @@ function TabelaGrupo({
             {linhas.map((l, i) => {
               const classifica = i < classificados;
               return (
-                <tr key={l.time.id} className="border-b border-linha">
+                <tr key={l.time.id} className={`border-b-2 border-linha ${classifica ? "" : ""}`}>
                   <th scope="row" className="sticky left-0 bg-preto py-2.5 pr-2 font-semibold">
                     <Link href={`/times/${l.time.slug}`} className="flex items-center gap-2.5 hover:text-sol">
                       <span
@@ -164,7 +160,7 @@ function TabelaGrupo({
                   {colunas.map((c) => (
                     <td
                       key={c.chave}
-                      className={`px-1 py-2.5 text-center ${c.chave === "pontos" ? "font-titulo text-xl text-branco" : "text-cinza"}`}
+                      className={`px-1 py-2.5 text-center ${c.oculto ? "hidden sm:table-cell" : ""} ${c.chave === "pontos" ? "font-titulo text-xl text-branco" : "text-cinza"}`}
                     >
                       {c.chave === "saldo" && l.saldo > 0 ? `+${l.saldo}` : l[c.chave]}
                     </td>
@@ -190,7 +186,7 @@ function Confronto({ dados, jogo, final = false }: { dados: DadosTorneio; jogo: 
     { lado: fora, gols: jogo.gols_fora, pen: jogo.penaltis_fora },
   ];
   return (
-    <div className={`bg-carvao ring-1 ring-inset ${final ? "ring-sol" : "ring-linha"}`}>
+    <div className={`border-2 ${final ? "border-sol" : "border-linha"} bg-preto`}>
       {linhas.map(({ lado, gols, pen }, i) => {
         const time = dados.times.find((t) => t.id === lado.timeId);
         const venceu = resultado?.vencedor === lado.timeId && lado.timeId !== null;

@@ -114,6 +114,7 @@ insert into public.premios (ordem, titulo, descricao) values
 (5, 'Melhor goleiro', null);
 
 update public.configuracoes set
+  instagram_usuario = 'barbudoscup',
   formato_disputa = 'Fase de grupos seguida de mata-mata',
   classificados_por_grupo = 2,
   disputa_terceiro = true

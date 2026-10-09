@@ -1,5 +1,4 @@
 import { Icone } from "@/components/Icone";
-import { SeloADefinir } from "@/components/Selo";
 import { linkDirect } from "@/lib/formato";
 
 /** Abre o direct do Instagram oficial. Toda dúvida e contato passam por aqui. */
@@ -7,21 +6,18 @@ export function BotaoInstagram({
   usuario,
   className = "",
   texto = "Falar com a organização no Instagram",
+  variante = "branco",
 }: {
   usuario: string | null;
   className?: string;
   texto?: string;
+  variante?: "branco" | "preto" | "sol";
 }) {
   if (!usuario) {
     return (
-      <span className={`inline-flex flex-wrap items-center gap-3 ${className}`}>
-        <span className="botao botao-fantasma" aria-disabled="true">
-          <Icone nome="instagram" className="text-xl" />
-          {texto}
-        </span>
-        <span className="text-base text-cinza">
-          Instagram oficial <SeloADefinir />
-        </span>
+      <span className={`botao ${className}`} aria-disabled="true">
+        <Icone nome="instagram" className="text-xl" />
+        Instagram da organização em breve
       </span>
     );
   }
@@ -30,7 +26,7 @@ export function BotaoInstagram({
       href={linkDirect(usuario)}
       target="_blank"
       rel="noopener noreferrer"
-      className={`botao botao-branco ${className}`}
+      className={`botao botao-${variante} ${className}`}
     >
       <Icone nome="instagram" className="text-xl" />
       {texto}

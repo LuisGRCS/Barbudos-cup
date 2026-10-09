@@ -1,50 +1,16 @@
 import Link from "next/link";
 import { EscudoTime } from "@/components/EscudoTime";
-import { diaSemana, diaEMes, hora } from "@/lib/formato";
+import { hora } from "@/lib/formato";
 import { golsDoJogo, ladosDoJogo, NOME_FASE } from "@/lib/torneio";
 import type { DadosTorneio, Jogo } from "@/lib/tipos";
 
-function Lado({
-  dados,
-  timeId,
-  rotulo,
-  alinhamento,
-  vencedor,
-}: {
-  dados: DadosTorneio;
-  timeId: number | null;
-  rotulo: string;
-  alinhamento: "esq" | "dir";
-  vencedor: boolean;
-}) {
-  const time = dados.times.find((t) => t.id === timeId);
-  const conteudo = (
-    <>
-      {time ? (
-        <EscudoTime id={time.id} nome={time.nome} escudoPath={time.escudo_path} tamanho={36} />
-      ) : (
-        <span aria-hidden="true" className="block h-[40px] w-[36px] bg-grafite recorte-escudo [--ponta:0.5rem]" />
-      )}
-      <span
-        className={`min-w-0 leading-tight font-semibold ${time ? "" : "text-cinza"} ${vencedor ? "text-branco" : ""} ${
-          alinhamento === "dir" ? "text-right" : ""
-        }`}
-      >
-        {time?.nome ?? rotulo}
-      </span>
-    </>
-  );
-  const classe = `flex min-w-0 items-center gap-2.5 ${alinhamento === "dir" ? "flex-row-reverse" : ""}`;
-  return time ? (
-    <Link href={`/times/${time.slug}`} className={`${classe} hover:text-sol`}>
-      {conteudo}
-    </Link>
-  ) : (
-    <div className={classe}>{conteudo}</div>
-  );
-}
+const FUSO = "America/Sao_Paulo";
+const semana = (iso: string) =>
+  new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, weekday: "short" }).format(new Date(iso)).replace(".", "");
+const diaMes = (iso: string) =>
+  new Intl.DateTimeFormat("pt-BR", { timeZone: FUSO, day: "2-digit", month: "2-digit" }).format(new Date(iso));
 
-/** Um jogo: times, horário ou placar, e quem fez os gols */
+/** Um jogo em formato de placar: data à esquerda, um time por linha com o placar ao lado */
 export function CartaoJogo({
   dados,
   jogo,
@@ -67,66 +33,77 @@ export function CartaoJogo({
   const grupo = dados.grupos.find((g) => g.id === jogo.grupo_id);
   const fase =
     jogo.fase === "grupos"
-      ? [grupo ? `Grupo ${grupo.nome}` : null, jogo.rodada ? `Rodada ${jogo.rodada}` : null].filter(Boolean).join(", ")
+      ? [grupo ? `Grupo ${grupo.nome}` : null, jogo.rodada ? `rodada ${jogo.rodada}` : null].filter(Boolean).join(", ")
       : NOME_FASE[jogo.fase];
+  const detalhes = [mostrarFase ? fase : null, jogo.campo].filter(Boolean).join(", ");
+
+  const linhas = [
+    { lado: casa, gols: jogo.gols_casa, pen: jogo.penaltis_casa, venceu: casaVence },
+    { lado: fora, gols: jogo.gols_fora, pen: jogo.penaltis_fora, venceu: foraVence },
+  ];
 
   return (
-    <article className="relative bg-carvao p-4 ring-1 ring-linha ring-inset sm:p-5">
-      {destaque && (
-        <p className="absolute -top-3 left-4 bg-vermelho px-2.5 py-0.5 text-sm font-bold" style={{ clipPath: "polygon(0.3rem 0,100% 0,calc(100% - 0.3rem) 100%,0 100%)" }}>
-          {destaque}
-        </p>
-      )}
-      <p className="mb-3 flex flex-wrap justify-between gap-x-4 text-base text-cinza">
-        <span>{mostrarFase ? fase : ""}</span>
-        <span>
-          {jogo.data_hora ? (
-            <time dateTime={jogo.data_hora}>
-              {diaSemana(jogo.data_hora).slice(0, 3)}, {diaEMes(jogo.data_hora)}, {hora(jogo.data_hora)}
-            </time>
-          ) : (
-            "Data a definir"
-          )}
-          {jogo.campo ? `, ${jogo.campo}` : ""}
-        </span>
-      </p>
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <Lado dados={dados} timeId={casa.timeId} rotulo={casa.rotulo} alinhamento="esq" vencedor={casaVence} />
-        <div className="text-center">
-          {placar ? (
-            <p className="numeros font-titulo text-[2.1rem] leading-none whitespace-nowrap">
-              <span className={casaVence ? "text-sol" : ""}>{jogo.gols_casa}</span>
-              <span className="mx-1.5 text-cinza-escuro">x</span>
-              <span className={foraVence ? "text-sol" : ""}>{jogo.gols_fora}</span>
-            </p>
-          ) : (
-            <p className="font-titulo text-2xl text-cinza-escuro">x</p>
-          )}
-          {penaltis && (
-            <p className="numeros text-sm text-cinza">
-              pênaltis {jogo.penaltis_casa} x {jogo.penaltis_fora}
-            </p>
-          )}
-        </div>
-        <Lado dados={dados} timeId={fora.timeId} rotulo={fora.rotulo} alinhamento="dir" vencedor={foraVence} />
+    <article className="grid grid-cols-[4.25rem_1fr] gap-4 border-b-2 border-linha py-4 sm:grid-cols-[5rem_1fr]">
+      <div className="pt-0.5">
+        {jogo.data_hora ? (
+          <time dateTime={jogo.data_hora} className="block leading-none">
+            <span className="block text-sm font-semibold text-cinza capitalize">{semana(jogo.data_hora)}</span>
+            <span className="numeros block font-titulo text-[1.7rem] font-black">{diaMes(jogo.data_hora)}</span>
+            <span className="numeros mt-0.5 block font-semibold">{hora(jogo.data_hora)}</span>
+          </time>
+        ) : (
+          <span className="text-sm text-cinza">Data a definir</span>
+        )}
       </div>
-      {gols.length > 0 && (
-        <div className="mt-3 grid grid-cols-2 gap-4 border-t border-linha pt-3 text-base text-cinza">
-          {[casa.timeId, fora.timeId].map((lado, i) => (
-            <ul key={i} className={i === 1 ? "text-right" : ""}>
-              {gols
-                .filter((g) => g.timeId === lado)
-                .map((g) => (
-                  <li key={g.id}>
-                    {g.nome}
-                    {g.contra ? " (contra)" : ""}
-                    {g.minuto !== null ? <span className="numeros text-cinza-escuro"> {g.minuto}&apos;</span> : null}
-                  </li>
-                ))}
-            </ul>
-          ))}
-        </div>
-      )}
+      <div className="min-w-0">
+        {destaque && <p className="mb-1.5 text-base font-bold text-sol">{destaque}</p>}
+        <ul className="grid gap-1.5">
+          {linhas.map(({ lado, gols: g, pen, venceu }, i) => {
+            const time = dados.times.find((t) => t.id === lado.timeId);
+            return (
+              <li key={i} className="flex items-center gap-2.5">
+                {time ? (
+                  <EscudoTime id={time.id} nome={time.nome} escudoPath={time.escudo_path} tamanho={26} />
+                ) : (
+                  <span aria-hidden="true" className="block h-[29px] w-[26px] border-2 border-dashed border-linha" />
+                )}
+                {time ? (
+                  <Link
+                    href={`/times/${time.slug}`}
+                    className={`min-w-0 flex-1 truncate text-lg font-semibold hover:text-sol ${placar && !venceu ? "text-cinza" : ""}`}
+                  >
+                    {time.nome}
+                  </Link>
+                ) : (
+                  <span className="min-w-0 flex-1 truncate text-lg text-cinza">{lado.rotulo}</span>
+                )}
+                {placar && (
+                  <span className={`numeros font-titulo text-[1.9rem] leading-none font-black ${venceu ? "text-sol" : ""}`}>
+                    {g}
+                    {pen !== null && <span className="ml-1 text-base font-semibold text-cinza">({pen})</span>}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+        {(detalhes || gols.length > 0) && (
+          <div className="mt-2 text-base text-cinza">
+            {detalhes && <p>{detalhes}</p>}
+            {gols.length > 0 && (
+              <p className="mt-1">
+                <span className="sr-only">Gols: </span>
+                {gols
+                  .map(
+                    (g) =>
+                      `${g.nome}${g.contra ? " (contra)" : ""}${g.minuto !== null ? ` ${g.minuto}'` : ""}`,
+                  )
+                  .join(", ")}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   );
 }

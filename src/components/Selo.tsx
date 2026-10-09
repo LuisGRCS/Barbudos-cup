@@ -1,24 +1,23 @@
 import type { ReactNode } from "react";
 
-/** Selo mostrado no lugar de qualquer informação que a organização ainda não definiu */
+/**
+ * Marcação para informação que a organização ainda não definiu:
+ * um campo tracejado, como espaço em branco de ficha a preencher.
+ */
 export function SeloADefinir({ grande = false, sobreSol = false }: { grande?: boolean; sobreSol?: boolean }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 font-semibold ring-1 ring-inset ${
-        sobreSol
-          ? "bg-[repeating-linear-gradient(-45deg,rgba(0,0,0,0.14)_0_6px,transparent_6px_12px)] text-preto ring-preto/60"
-          : "bg-[repeating-linear-gradient(-45deg,rgba(247,200,30,0.16)_0_6px,transparent_6px_12px)] text-sol ring-sol/50"
-      } ${
-        grande ? "py-1 text-lg" : "py-0.5 text-base"
-      }`}
-      style={{ clipPath: "polygon(0.35rem 0, 100% 0, calc(100% - 0.35rem) 100%, 0 100%)" }}
+      className={`inline-block border-[1.5px] border-dashed px-2 align-middle leading-snug font-semibold ${
+        sobreSol ? "border-preto/60 text-preto" : "border-sol/70 text-sol"
+      } ${grande ? "py-0.5 text-[0.62em] tracking-normal normal-case" : "py-px text-[0.9em]"}`}
+      style={grande ? { fontFamily: "var(--font-texto)", fontWeight: 600 } : undefined}
     >
-      A definir
+      a definir
     </span>
   );
 }
 
-/** Mostra o conteúdo quando o valor existe; caso contrário, o selo "A definir" */
+/** Mostra o conteúdo quando o valor existe; caso contrário, a marcação "a definir" */
 export function Campo<T>({
   valor,
   children,

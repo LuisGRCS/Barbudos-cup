@@ -77,8 +77,8 @@ export default async function Regulamento() {
         </div>
       </div>
 
-      <div className="mt-14 recorte-escudo bg-carvao px-6 pt-8 pb-14 ring-1 ring-linha ring-inset sm:px-10">
-        <h2 className="text-4xl">Ficou alguma dúvida sobre as regras?</h2>
+      <div className="mt-16 border-t-2 border-branco pt-8">
+        <h2 className="text-[clamp(2.4rem,9vw,4rem)]">Ficou dúvida sobre alguma regra?</h2>
         <p className="mt-3 mb-6 max-w-[56ch] text-cinza">
           Chama a organização no direct do Instagram. Recursos sobre jogos são enviados pelo capitão em até 24 horas.
         </p>

@@ -45,20 +45,19 @@ export default async function Jogos() {
       ) : (
         <>
           {(proximo || ultimo) && (
-            <div className="mb-14 grid gap-6 pt-3 md:grid-cols-2">
+            <div className="mb-16 grid gap-x-10 border-t-2 border-branco md:grid-cols-2">
               {proximo && <CartaoJogo dados={dados} jogo={proximo} destaque="Próximo jogo" />}
               {ultimo && <CartaoJogo dados={dados} jogo={ultimo} destaque="Último resultado" />}
             </div>
           )}
 
-          <nav aria-label="Rodadas" className="-mx-4 mb-8 overflow-x-auto px-4">
-            <ul className="flex gap-2">
+          <nav aria-label="Rodadas" className="-mx-4 mb-10 overflow-x-auto px-4">
+            <ul className="flex gap-6">
               {blocos.map((b) => (
                 <li key={b.chave}>
                   <a
                     href={`#${b.chave}`}
-                    className="block bg-grafite px-4 py-2 font-semibold whitespace-nowrap transition-colors hover:bg-vermelho"
-                    style={{ clipPath: "polygon(0.4rem 0,100% 0,calc(100% - 0.4rem) 100%,0 100%)" }}
+                    className="block font-titulo text-2xl font-black whitespace-nowrap text-cinza uppercase underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors hover:text-branco hover:decoration-sol"
                   >
                     {b.titulo}
                   </a>
@@ -67,13 +66,13 @@ export default async function Jogos() {
             </ul>
           </nav>
 
-          <div className="space-y-12">
+          <div className="space-y-14">
             {blocos.map((b) => (
               <section key={b.chave} id={b.chave} aria-labelledby={`t-${b.chave}`} className="scroll-mt-24">
-                <h2 id={`t-${b.chave}`} className="mb-4 border-b-2 border-vermelho pb-2 text-4xl">
+                <h2 id={`t-${b.chave}`} className="mb-1 text-[clamp(2.6rem,10vw,4rem)]">
                   {b.titulo}
                 </h2>
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-x-10 border-t-2 border-branco md:grid-cols-2">
                   {b.jogos.map((j) => (
                     <CartaoJogo key={j.id} dados={dados} jogo={j} mostrarFase={j.fase === "grupos"} />
                   ))}

@@ -1,57 +1,59 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BotaoInstagram } from "@/components/BotaoInstagram";
-import { LINKS } from "@/lib/navegacao";
 import { Container } from "@/components/Titulo";
 import { lerConfiguracoes } from "@/lib/dados";
 import { linkInstagram } from "@/lib/formato";
+import { LINKS } from "@/lib/navegacao";
 
 export async function Rodape() {
   const cfg = await lerConfiguracoes();
+  const usuario = cfg.instagram_usuario?.replace(/^@/, "") ?? null;
   return (
-    <footer className="relative mt-24 border-t-4 border-vermelho bg-carvao">
-      <div aria-hidden="true" className="absolute inset-x-0 -top-[10px] h-[6px] bg-azul" style={{ clipPath: "polygon(0 0,100% 0,98% 100%,2% 100%)" }} />
-      <Container className="grid gap-10 py-12 md:grid-cols-[1fr_auto] md:items-start">
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center gap-4">
-            <Image src="/logo-escudo.png" alt="" width={72} height={78} className="h-[4.5rem] w-auto" />
-            <div>
-              <p className="font-titulo text-3xl leading-none uppercase">
-                {cfg.nome_campeonato}
-              </p>
-              <p className="mt-1 text-cinza">Campeonato de futebol 7{cfg.edicao ? `, ${cfg.edicao}` : ""}</p>
-            </div>
-          </div>
-          <div>
-            <p className="mb-3 max-w-[46ch] text-cinza">
-              Contato e dúvidas somente pelo direct do Instagram oficial.
-            </p>
-            <BotaoInstagram usuario={cfg.instagram_usuario} />
-            {cfg.instagram_usuario && (
-              <p className="mt-3 text-base text-cinza">
-                Siga{" "}
-                <a href={linkInstagram(cfg.instagram_usuario)} target="_blank" rel="noopener noreferrer" className="font-semibold text-branco underline decoration-vermelho decoration-2 underline-offset-4 hover:text-sol">
-                  @{cfg.instagram_usuario.replace(/^@/, "")}
+    <footer className="mt-28 bg-azul text-branco">
+      <div aria-hidden="true" className="h-1.5 bg-vermelho" />
+      <Container className="grid gap-12 pt-14 pb-12 lg:grid-cols-[1.4fr_1fr]">
+        <div>
+          <p className="font-titulo text-[clamp(2.6rem,10vw,4.5rem)] leading-[0.88] font-black uppercase">
+            Dúvida? Chama no direct.
+          </p>
+          <p className="mt-4 max-w-[44ch] text-lg text-white/80">
+            Todo contato com a organização é feito pelo Instagram oficial
+            {usuario ? (
+              <>
+                ,{" "}
+                <a href={linkInstagram(usuario)} target="_blank" rel="noopener noreferrer" className="font-bold text-branco underline underline-offset-4 hover:text-sol">
+                  @{usuario}
                 </a>
-              </p>
-            )}
-          </div>
+              </>
+            ) : null}
+            .
+          </p>
+          <BotaoInstagram usuario={usuario} className="mt-6" />
         </div>
-        <nav aria-label="Rodapé">
-          <ul className="grid grid-cols-2 gap-x-10 gap-y-2 text-lg">
-            {[...LINKS, { href: "/inscricao", rotulo: "Inscreva seu time" }].map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="text-cinza transition-colors hover:text-branco">
-                  {l.rotulo}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="flex flex-col gap-8 lg:items-end">
+          <nav aria-label="Rodapé">
+            <ul className="grid grid-cols-2 gap-x-10 gap-y-1.5 text-lg font-semibold">
+              {[...LINKS, { href: "/inscricao", rotulo: "Inscreva seu time" }].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-white/85 hover:text-sol">
+                    {l.rotulo}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </Container>
-      <Container className="border-t border-linha py-5 text-sm text-cinza-escuro">
-        © {cfg.nome_campeonato}. Os dados dos capitães são usados só para a organização do campeonato e nunca são exibidos publicamente.
-      </Container>
+      <div className="bg-preto">
+        <Container className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center">
+          <Image src="/logo-escudo.png" alt="" width={44} height={48} className="h-12 w-auto self-start" />
+          <p className="text-sm text-cinza">
+            {cfg.nome_campeonato}, futebol 7{cfg.edicao ? `, ${cfg.edicao}` : ""}. Os dados dos capitães são usados só
+            pela organização e nunca aparecem no site.
+          </p>
+        </Container>
+      </div>
     </footer>
   );
 }

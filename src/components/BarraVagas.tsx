@@ -1,22 +1,20 @@
+/** Uma casinha por vaga: preenchida = time confirmado */
 export function BarraVagas({ preenchidas, total }: { preenchidas: number; total: number | null }) {
   if (!total) return null;
-  const pct = Math.min(100, Math.round((preenchidas / total) * 100));
   return (
     <div>
-      <p className="numeros text-lg font-semibold">
+      <ol className="flex flex-wrap gap-1.5" aria-label={`${preenchidas} de ${total} vagas preenchidas`}>
+        {Array.from({ length: total }, (_, i) => (
+          <li
+            key={i}
+            aria-hidden="true"
+            className={`h-7 w-5 border-2 border-current ${i < preenchidas ? "bg-current" : ""}`}
+          />
+        ))}
+      </ol>
+      <p className="numeros mt-2 font-semibold">
         {preenchidas} de {total} vagas preenchidas
       </p>
-      <div
-        className="mt-2 h-3 bg-preto/40"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={total}
-        aria-valuenow={preenchidas}
-        aria-label="Vagas preenchidas"
-        style={{ clipPath: "polygon(0.4rem 0,100% 0,calc(100% - 0.4rem) 100%,0 100%)" }}
-      >
-        <div className="h-full bg-current" style={{ width: `${pct}%` }} />
-      </div>
     </div>
   );
 }
