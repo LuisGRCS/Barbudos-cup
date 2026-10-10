@@ -11,7 +11,7 @@ export function BotaoInstagram({
   usuario: string | null;
   className?: string;
   texto?: string;
-  variante?: "branco" | "preto" | "sol";
+  variante?: "branco" | "preto" | "sol" | "contorno";
 }) {
   if (!usuario) {
     return (

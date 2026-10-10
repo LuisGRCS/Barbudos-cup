@@ -28,8 +28,8 @@ export default async function Estatisticas() {
         <Bloco id="artilharia" titulo="Artilharia" vazio="Nenhum gol marcado ainda." className="lg:row-span-2">
           {gols.length > 0 && (
             <>
-              <div className="mb-4 flex items-center gap-4 bg-sol px-5 py-5 text-preto">
-                <span className="numeros font-titulo text-7xl leading-none font-black">{gols[0].total}</span>
+              <div className="mb-4 flex items-center gap-4 border-l-4 border-sol py-2 pl-4">
+                <span className="numeros font-titulo text-7xl leading-none font-black text-sol">{gols[0].total}</span>
                 <div className="min-w-0">
                   <p className="text-base font-semibold">
                     {gols[0].total === 1 ? "gol" : "gols"}, {lideres.length > 1 ? "dividem a liderança" : "lidera a artilharia"}

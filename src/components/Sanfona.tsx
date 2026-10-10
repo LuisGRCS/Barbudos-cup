@@ -13,7 +13,7 @@ export function Sanfona({
   id?: string;
 }) {
   return (
-    <details id={id} open={aberto} className="group scroll-mt-24 border-b-2 border-linha">
+    <details id={id} open={aberto} className="group scroll-mt-32 border-b-2 border-linha">
       <summary className="flex cursor-pointer list-none items-start justify-between gap-4 py-5 text-left text-xl font-semibold transition-colors hover:text-sol [&::-webkit-details-marker]:hidden">
         <span className="min-w-0">{titulo}</span>
         <span

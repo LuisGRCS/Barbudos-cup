@@ -51,7 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Pular para o conteúdo
         </a>
         <Cabecalho />
-        <main id="conteudo" className="flex-1 pt-16 lg:pt-20">
+        <main id="conteudo" className="flex-1 pt-[6.6rem]">
           {children}
         </main>
         <Rodape />

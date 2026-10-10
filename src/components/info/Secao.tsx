@@ -15,7 +15,7 @@ export function Secao({
   return (
     <section
       aria-labelledby={id}
-      className="grid scroll-mt-24 gap-5 border-t-2 border-branco pt-6 pb-16 lg:grid-cols-[19rem_1fr] lg:gap-10"
+      className="grid scroll-mt-32 gap-5 border-t-2 border-branco pt-6 pb-16 lg:grid-cols-[19rem_1fr] lg:gap-10"
     >
       <h2 id={id} className="text-[clamp(2.6rem,10vw,3.75rem)]">
         {titulo}

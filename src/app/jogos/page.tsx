@@ -68,7 +68,7 @@ export default async function Jogos() {
 
           <div className="space-y-14">
             {blocos.map((b) => (
-              <section key={b.chave} id={b.chave} aria-labelledby={`t-${b.chave}`} className="scroll-mt-24">
+              <section key={b.chave} id={b.chave} aria-labelledby={`t-${b.chave}`} className="scroll-mt-32">
                 <h2 id={`t-${b.chave}`} className="mb-1 text-[clamp(2.6rem,10vw,4rem)]">
                   {b.titulo}
                 </h2>

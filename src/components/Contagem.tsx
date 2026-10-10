@@ -49,12 +49,12 @@ export function Contagem({
       <div role="timer" aria-label={rotulo} data-alvo={alvo}>
         <dl className={`grid grid-cols-4 divide-x-2 ${escuro ? "divide-preto/20" : "divide-giz"}`}>
           {itens.map((item, i) => (
-            <div key={i} className="flex flex-col px-2 first:pl-0 sm:px-5">
+            <div key={i} className="flex flex-col items-center px-1">
               <dt className={`order-last text-sm font-semibold sm:text-base ${escuro ? "text-preto/70" : "text-cinza"}`}>
                 {item.nome}
               </dt>
               <dd
-                className={`numeros font-titulo text-[clamp(3rem,15vw,5.5rem)] leading-[0.9] font-black ${
+                className={`numeros font-titulo text-[clamp(2.6rem,13vw,4rem)] leading-[0.9] font-black ${
                   escuro ? "text-preto" : i === 0 ? "text-sol" : "text-branco"
                 }`}
               >

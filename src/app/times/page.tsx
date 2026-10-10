@@ -35,23 +35,21 @@ export default async function Times() {
               {/* Cada time vira uma figurinha do álbum */}
               <Link
                 href={`/times/${t.slug}`}
-                className="group flex h-full flex-col rounded-md bg-branco p-1.5 text-preto transition-transform hover:-translate-y-1"
+                className="group flex h-full flex-col border border-linha bg-carvao transition-colors hover:border-sol"
               >
-                <div className="linhas-de-campo relative grid aspect-[5/4] place-items-center rounded-[3px] bg-preto [background-size:180%] [background-position:center]">
-                  <div aria-hidden="true" className="absolute inset-0 rounded-[3px] bg-preto/80" />
+                <div className="relative grid aspect-[5/4] place-items-center border-b border-linha">
                   <div className="relative">
                     <EscudoTime id={t.id} nome={t.nome} escudoPath={t.escudo_path} tamanho={68} />
                   </div>
                   {nomeGrupo(t.grupo_id) && (
-                    <span className="absolute top-1.5 left-1.5 bg-sol px-1.5 font-titulo text-lg leading-tight font-black">
-                      <span className="sr-only">Grupo </span>
-                      {nomeGrupo(t.grupo_id)}
+                    <span className="absolute top-2 left-2 border border-linha px-1.5 text-sm font-semibold text-cinza">
+                      Grupo {nomeGrupo(t.grupo_id)}
                     </span>
                   )}
                 </div>
-                <div className="flex flex-1 flex-col px-1.5 pt-2.5 pb-2">
-                  <h2 className="text-[1.55rem] leading-[0.95] sm:text-[1.8rem]">{t.nome}</h2>
-                  {t.instagram && <p className="mt-1 truncate text-sm font-semibold text-preto/60">@{t.instagram}</p>}
+                <div className="flex flex-1 flex-col px-3 pt-3 pb-3">
+                  <h2 className="text-[1.5rem] leading-[0.95] sm:text-[1.7rem]">{t.nome}</h2>
+                  {t.instagram && <p className="mt-1 truncate text-sm text-cinza">@{t.instagram}</p>}
                 </div>
               </Link>
             </li>
